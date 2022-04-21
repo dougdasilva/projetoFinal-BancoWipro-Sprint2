@@ -307,7 +307,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"balance\": 3360\r\n}",
+							"raw": "{\r\n    \"balance\": 3360,\r\n    \"creditCard\": {\r\n        \"cvv\":\"008\",\r\n        \"cardLevel\": 1\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -336,7 +336,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"balance\": 6800,\r\n    \"specialLimit\": 400\r\n}",
+							"raw": "{\r\n    \"balance\": 600,\r\n    \"specialLimit\": 400,\r\n    \"creditCard\":{\r\n        \"cvv\":\"079\",\r\n        \"cardlevel\": 0\r\n    }\r\n    \r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -432,8 +432,17 @@
 					"request": {
 						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"customer\":{\r\n        \"name\": \"Josimar Fonseca\"\r\n    },\r\n    \"crediCard\":{\r\n        \"cvv\":\"008\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "localhost:8081/managers/checkingAccount/121/fdafafafaf",
+							"raw": "localhost:8081/managers/checkingAccount/121/149526147268035",
 							"host": [
 								"localhost"
 							],
@@ -442,27 +451,7 @@
 								"managers",
 								"checkingAccount",
 								"121",
-								"fdafafafaf"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "UpdateChecking Copy",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/managers/checkingAccount/121",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"managers",
-								"checkingAccount",
-								"121"
+								"149526147268035"
 							]
 						}
 					},
@@ -471,10 +460,19 @@
 				{
 					"name": "UpdateSpecial",
 					"request": {
-						"method": "GET",
+						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"customer\":{\r\n        \"name\": \"Beiramar sSolemar\"\r\n    },\r\n    \"creditCard\":{\r\n        \"cvv\":\"009\",\r\n        \"cardLevel\": 1\r\n    },\r\n    \"specialLimit\": 600\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "localhost:8081/managers/specialAccount/121/afafdfdfdfaf",
+							"raw": "localhost:8081/managers/specialAccount/121/061248381529745",
 							"host": [
 								"localhost"
 							],
@@ -483,7 +481,60 @@
 								"managers",
 								"specialAccount",
 								"121",
-								"afafdfdfdfaf"
+								"061248381529745"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCustomerAccount",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/customers/447798043464738",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"customers",
+								"447798043464738"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutDepositAccount",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/customers/447798043464738?value=200",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"customers",
+								"447798043464738"
+							],
+							"query": [
+								{
+									"key": "value",
+									"value": "200"
+								}
 							]
 						}
 					},

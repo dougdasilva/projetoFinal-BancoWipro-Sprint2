@@ -141,8 +141,9 @@ public class ManageService {
 		Manager manager = managerRepository.findByRegistration(registration);
 		if(managerRepository.existsById(manager.getId())==true){
 			CheckingAccount cadb = checkingAccountRepository.findByAccountNumber(number);
-			cadb.setCustomer((Customer)updateCa.getCustomer());
+			cadb.setCustomer(updateCa.getCustomer());
 			cadb.setCreditCard(updateCa.getCreditCard());
+			checkingAccountRepository.save(cadb);
 			return  cadb;
 		}
 		return null;
@@ -152,9 +153,10 @@ public class ManageService {
 		Manager manager = managerRepository.findByRegistration(registration);
 		if(managerRepository.existsById(manager.getId())==true){
 			SpecialAccount cadb = specialAccountRepository.findByAccountNumber(number);
-			cadb.setCustomer((Customer)updateSa.getCustomer());
+			cadb.setCustomer(updateSa.getCustomer());
 			cadb.setCreditCard(updateSa.getCreditCard());
 			cadb.setSpecialLimit(updateSa.getSpecialLimit());
+			specialAccountRepository.save(cadb);
 			return  cadb;
 		}
 		return null;

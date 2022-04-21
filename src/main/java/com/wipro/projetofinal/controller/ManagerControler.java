@@ -71,7 +71,17 @@ public class ManagerControler {
 	public ResponseEntity<SpecialAccount> salvarSpecialAccount(@PathVariable String registration, @RequestBody SpecialAccount account) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(manageService.saveSpecialAccount(registration,account));
 	}
+	
+	@PutMapping("/checkingAccount/{registration}/{accountNumber}")
+	public ResponseEntity<CheckingAccount> updateChecking(@PathVariable String registration, @PathVariable String accountNumber, @RequestBody  CheckingAccount updateCa){
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(manageService.updateByAccountNumberChecking(registration, accountNumber, updateCa));
+	}
 
+	@PutMapping("/specialAccount/{registration}/{accountNumber}")
+	public ResponseEntity<SpecialAccount> updateSpecial(@PathVariable String registration, @PathVariable String accountNumber, @RequestBody  SpecialAccount updateSa){
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(manageService.updateByAccountNumberSpecial(registration, accountNumber, updateSa));
+	}
+	
 	@DeleteMapping("/checkingAccount/{registration}/{accountNumber}")
 	public ResponseEntity<Void> deleteChecking(@PathVariable String registration ,@PathVariable String accountNumber) {
 		manageService.deleteAccountChecking(registration,accountNumber);
