@@ -7,7 +7,5 @@ import com.wipro.projetofinal.entities.Manager;
 
 @Repository
 public interface ManagerRepository extends JpaRepository<Manager, Long> {
-
 	Manager findByRegistration(String registration);
-	
 }

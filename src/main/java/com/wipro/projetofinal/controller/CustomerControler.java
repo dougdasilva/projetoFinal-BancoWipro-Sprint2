@@ -21,8 +21,5 @@ public class CustomerControler {
 	private CustomerService customerService;
 	
 	
-	@PostMapping
-	public ResponseEntity<Customer> salvar(@RequestBody Customer customer) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(customerService.salvar(customer));
-	}
 }
+

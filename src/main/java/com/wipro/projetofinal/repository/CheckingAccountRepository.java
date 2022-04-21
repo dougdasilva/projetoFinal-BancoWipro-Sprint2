@@ -7,5 +7,5 @@ import com.wipro.projetofinal.entities.CheckingAccount;
 
 @Repository
 public interface CheckingAccountRepository extends JpaRepository<CheckingAccount, Long>{
-
+    CheckingAccount findByAccountNumber(String accountNumber);
 }

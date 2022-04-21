@@ -16,8 +16,8 @@ public class SpecialAccount extends Account {
 	public SpecialAccount() {
 	}
 
-	public SpecialAccount(Double balance, Double specialLimit, Instant createdDate) {
-		super(balance, createdDate);
+	public SpecialAccount(Double balance,Double specialLimit) {
+		super(balance);
 		this.specialLimit = specialLimit;
 	}
 

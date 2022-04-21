@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.wipro.projetofinal.entities.enums.CardLevel;
 import com.wipro.projetofinal.entities.enums.MovimentDescription;
 
 @Entity
@@ -37,6 +38,7 @@ public class Moviment implements Serializable{
 		this.value = value;
 		this.accountDestination = accountDestination;
 		this.movimentDescription = md;
+		setMovimentDescription(movimentDescription);
 	}
 
 	public Calendar getMovimentDate() {
@@ -67,12 +69,15 @@ public class Moviment implements Serializable{
 		return movimentDescription;
 	}
 
-	public void setMovimentDescription(MovimentDescription movimentDescription) {
-		this.movimentDescription = movimentDescription;
-	}
 
 	public Long getId() {
 		return id;
+	}
+
+	public void setMovimentDescription(MovimentDescription moviment ){
+		if(moviment!=null) {
+			this.movimentDescription = MovimentDescription.valueOf(moviment.getCode());
+		}
 	}
 
 	@Override

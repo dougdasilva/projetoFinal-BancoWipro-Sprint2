@@ -17,7 +17,7 @@ import com.wipro.projetofinal.entities.User;
 public class AccountDTO {
 
 	
-	protected Integer accountNumber = 0;
+	protected String accountNumber;
 	protected Double balance;
 	
     protected Customer customer;
@@ -36,7 +36,7 @@ public class AccountDTO {
 	}
 
 
-	public Integer getAccountNumber() {
+	public String getAccountNumber() {
 		return accountNumber;
 	}
 

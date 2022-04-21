@@ -2,7 +2,24 @@ package com.wipro.projetofinal.entities.enums;
 
 public enum MovimentDescription {
 
-	WITHDRAW,
-	DEPOSIT,
-	TRANSFER
+	WITHDRAW(1),
+	DEPOSIT(2),
+	TRANSFER(3);
+
+	private Integer code;
+
+	private MovimentDescription(int code){
+		this.code = code;
+	}
+
+	public Integer getCode(){
+		return this.code;
+	}
+	public static MovimentDescription valueOf(int value){
+		for (MovimentDescription code:
+				MovimentDescription.values()) {
+			if(code.getCode()==value) {return code;}
+		}
+		throw new IllegalArgumentException("Codigo invalido");
+	}
 }
