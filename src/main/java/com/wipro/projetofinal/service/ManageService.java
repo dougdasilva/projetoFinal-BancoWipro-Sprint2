@@ -2,6 +2,7 @@ package com.wipro.projetofinal.service;
 
 import com.wipro.projetofinal.service.exeption.ResourceNotFoundExcception;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import com.wipro.projetofinal.entities.Account;
@@ -109,20 +110,30 @@ public class ManageService {
 		return null;
 	}
 
-	
+	// tratamento feito
 	public void deleteAccountChecking(String registration, String number){
-		Manager manager = managerRepository.findByRegistration(registration);
-		if(managerRepository.existsById(manager.getId())==true){
-		 CheckingAccount obj =	checkingAccountRepository.findByAccountNumber(number);
-		 checkingAccountRepository.delete(obj);
+		try{
+			Manager manager = managerRepository.findByRegistration(registration);
+			if(managerRepository.existsById(manager.getId())==true){
+				CheckingAccount obj =	checkingAccountRepository.findByAccountNumber(number);
+				checkingAccountRepository.delete(obj);
+			}
+		}
+		catch (InvalidDataAccessApiUsageException e){
+			throw new ResourceNotFoundExcception(number);
 		}
 	}
-
+	// tratamento feito
 	public void deleteAccountSpecial(String registration, String number){
-		Manager manager = managerRepository.findByRegistration(registration);
-		if(managerRepository.existsById(manager.getId())==true){
-			SpecialAccount obj = specialAccountRepository.findByAccountNumber(number);
-			specialAccountRepository.delete(obj);
+		try {
+			Manager manager = managerRepository.findByRegistration(registration);
+			if (managerRepository.existsById(manager.getId()) == true) {
+				SpecialAccount obj = specialAccountRepository.findByAccountNumber(number);
+				specialAccountRepository.delete(obj);
+			}
+		}
+		catch (InvalidDataAccessApiUsageException e){
+			throw new ResourceNotFoundExcception(number);
 		}
 	}
 
@@ -136,7 +147,7 @@ public class ManageService {
 		}
 		return null;
 	}
-	
+
 	public SpecialAccount updateByAccountNumberSpecial(String registration, String number, SpecialAccount updateSa) {
 		Manager manager = managerRepository.findByRegistration(registration);
 		if(managerRepository.existsById(manager.getId())==true){
@@ -148,6 +159,6 @@ public class ManageService {
 		}
 		return null;
 	}
-	
+
 
 }
