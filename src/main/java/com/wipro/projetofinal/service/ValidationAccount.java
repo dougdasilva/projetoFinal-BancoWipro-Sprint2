@@ -1,5 +1,5 @@
 //package com.wipro.projetofinal.service;
-//
+
 //import java.util.InputMismatchException;
 //import java.util.List;
 //
@@ -17,7 +17,7 @@
 //	}
 //
 //	public static boolean existNumberCPF(String cpf, List<Account> accounts) {
-//
+
 //		for (Account account : accounts) {
 //			if (account.getCpf().equals(cpf)) {
 //				return true;
@@ -43,8 +43,8 @@
 //			sm = 0;
 //			peso = 10;
 //			for (i = 0; i < 9; i++) {
-//				// converte o i-esimo caractere do CPF em um numero:
-//				// por exemplo, transforma o caractere '0' no inteiro 0
+				// converte o i-esimo caractere do CPF em um numero:
+				// por exemplo, transforma o caractere '0' no inteiro 0
 //				// (48 eh a posicao de '0' na tabela ASCII)
 //				num = (int) (CPF.charAt(i) - 48);
 //				sm = sm + (num * peso);
@@ -52,7 +52,7 @@
 //			}
 //
 //			r = 11 - (sm % 11);
-//			if ((r == 10) || (r == 11))
+		//	if ((r == 10) || (r == 11))
 //				dig10 = '0';
 //			else
 //				dig10 = (char) (r + 48); // converte no respectivo caractere numerico

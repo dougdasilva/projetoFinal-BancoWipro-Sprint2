@@ -1,7 +1,7 @@
 package com.wipro.projetofinal.entities;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.time.Instant;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -10,43 +10,50 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.wipro.projetofinal.entities.enums.CardLevel;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.wipro.projetofinal.entities.enums.MovimentDescription;
 
 @Entity
 @Table(name = "tb_movimenties")
-public class Moviment implements Serializable{
-	
+public class Moviment implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	private Calendar movimentDate;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone = "GMT-3")
+	private Instant movimentDate;
 	private Double value;
+	private String accountOrigin;
 	private String accountDestination;
 	private MovimentDescription movimentDescription;
-	
+
 	public Moviment() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Moviment(Long id, Calendar movimentDate, Double value, String accountDestination, MovimentDescription md) {
-		this.id = id;
-		this.movimentDate = movimentDate;
+	public Moviment(Double value, String accountOrigin, String accountDestination, MovimentDescription md) {
+		this.movimentDate = Instant.now();
 		this.value = value;
+		this.accountOrigin = accountOrigin;
 		this.accountDestination = accountDestination;
 		this.movimentDescription = md;
-		setMovimentDescription(movimentDescription);
 	}
 
-	public Calendar getMovimentDate() {
+	public Moviment(Double value, MovimentDescription md) {
+		this.movimentDate = Instant.now();
+		this.value = value;
+		this.movimentDescription = md;
+	}
+
+	public String getAccountOrigin() {
+		return accountOrigin;
+	}
+
+	public Instant getMovimentDate() {
 		return movimentDate;
-	}
-
-	public void setMovimentDate(Calendar movimentDate) {
-		this.movimentDate = movimentDate;
 	}
 
 	public Double getValue() {
@@ -69,14 +76,13 @@ public class Moviment implements Serializable{
 		return movimentDescription;
 	}
 
-
 	public Long getId() {
 		return id;
 	}
 
-	public void setMovimentDescription(MovimentDescription moviment ){
-		if(moviment!=null) {
-			this.movimentDescription = MovimentDescription.valueOf(moviment.getCode());
+	public void setMovimentDescription(MovimentDescription moviment) {
+		if (moviment != null) {
+			this.movimentDescription = moviment;
 		}
 	}
 

@@ -88,6 +88,7 @@ public class CreditCard implements Serializable {
 			this.cardLevel = cardLevel;
 		}
 	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

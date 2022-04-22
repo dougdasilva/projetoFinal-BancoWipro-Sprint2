@@ -4,7 +4,9 @@ public enum MovimentDescription {
 
 	WITHDRAW(1),
 	DEPOSIT(2),
-	TRANSFER(3);
+	TRANSFER_SENT(3),
+	TRANSFER_RECEIVED(4);
+
 
 	private Integer code;
 

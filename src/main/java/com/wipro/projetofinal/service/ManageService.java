@@ -1,5 +1,6 @@
 package com.wipro.projetofinal.service;
 
+import com.wipro.projetofinal.service.exeption.AlreadyExistAccountByCpf;
 import com.wipro.projetofinal.service.exeption.ResourceNotFoundExcception;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -34,19 +35,40 @@ public class ManageService {
 	
 	@Autowired
 	private CustomerRepository customerRepository;
+	
+	
+	
 
 	public Manager saveManager(Manager manager) {
 		return managerRepository.save(manager);
 	}
 
  	public CheckingAccount saveCheckingAccount(String registration, CheckingAccount account) {
-		Manager manager = managerRepository.findByRegistration(registration);
-		if(managerRepository.existsById(manager.getId()) == true) {
+		
+ 		Manager manager = managerRepository.findByRegistration(registration);
+ 		
+		if(manager != null) {			//Se existir esse registro eu consigo entrar no fluxo abaixo.
 			account.setCreatedDate(Instant.now());
 			account.setAccountNumber();
-			return checkingAccountRepository.save(account);    //Se existir esse registro eu consigo salvar o "CheckingAccount".
-		};
-		return checkingAccountRepository.getById((long) 0);    // Se não existir simplesmente vai dar erro 500 na aplicação.   
+			
+			String customerCpf = account.getCustomer().getCpf();      // Pego o cpf do Customer mandado pelo JSON
+			Customer customer = customerRepository.findByCpf(customerCpf); // Pego o Customer associado ao cpf acima
+			
+				if(checkingAccountRepository.findByCustomer(customer) == null) {   // Se existir um checkingAccount com esse Customer ñ é pra deixar salvar
+					if(customerRepository.findByCpf(customerCpf) == null) {  // Se já existir um Customer com esse cpf, so salva a Account e descartar o customer
+					return checkingAccountRepository.save(account);
+				} 	else {
+					account.setCustomer(customer);
+					return checkingAccountRepository.save(account);
+				}
+				
+		} 		else {
+				 throw new AlreadyExistAccountByCpf(customerCpf);
+			}
+				
+					
+		}else {
+			throw new NullPointerException("Valor inexistente"); }   // Se não existir simplesmente vai dar erro 500 na aplicação.   
 	}
 
 	public SpecialAccount saveSpecialAccount(String registration, SpecialAccount account) {
@@ -54,9 +76,24 @@ public class ManageService {
 		if(managerRepository.existsById(manager.getId()) == true) {
 			account.setAccountNumber();
 			account.setCreatedDate(Instant.now());
-			return specialAccountRepository.save(account);    //Se existir esse registro eu consigo salvar o "CheckingAccount".
-		};
-		return specialAccountRepository.getById((long) 0);    // Se não existir simplesmente vai dar erro 500 na aplicação.   
+			
+			
+			String customerCpf = account.getCustomer().getCpf();      // Pego o cpf do Customer mandado pelo JSON
+			Customer customer = customerRepository.findByCpf(customerCpf); // Pego o Customer associado ao cpf acima
+			if(specialAccountRepository.findByCustomer(customer) == null) {   // Se existir um checkingAccount com esse Customer ñ é pra deixar salvar
+				if(customerRepository.findByCpf(customerCpf) == null) {  // Se já existir um Customer com esse cpf, so salva a Account e descartar o customer
+					return specialAccountRepository.save(account);
+				} else {
+					account.setCustomer(customer);
+					return specialAccountRepository.save(account);
+				}
+				
+			} else {
+				throw new AlreadyExistAccountByCpf(customerCpf);
+			}
+					
+		}else {
+			throw new NullPointerException("Valor inexistente"); }
 	}
 
 	// ele retorna uma lista vazia nao precisa de execao
