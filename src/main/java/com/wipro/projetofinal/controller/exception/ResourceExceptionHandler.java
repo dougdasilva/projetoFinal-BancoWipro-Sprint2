@@ -1,19 +1,17 @@
 package com.wipro.projetofinal.controller.exception;
 
-import com.sun.net.httpserver.HttpsServer;
+import java.time.Instant;
 
-import com.wipro.projetofinal.service.exeption.AlreadyExistAccountByCpf;
+import javax.servlet.http.HttpServletRequest;
 
-import com.wipro.projetofinal.service.exeption.NumberException;
-
-import com.wipro.projetofinal.service.exeption.ResourceNotFoundExcception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.servlet.http.HttpServletRequest;
-import java.time.Instant;
+import com.wipro.projetofinal.service.exeption.AlreadyExistAccountByCpf;
+import com.wipro.projetofinal.service.exeption.InvalidValueException;
+import com.wipro.projetofinal.service.exeption.ResourceNotFoundExcception;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
@@ -43,8 +41,8 @@ public class ResourceExceptionHandler {
     }
     
     
-  @ExceptionHandler(NumberException.class)
-    public ResponseEntity<StandardError> numberException(NumberException e, HttpServletRequest request){
+  @ExceptionHandler(InvalidValueException.class)
+    public ResponseEntity<StandardError> numberException(InvalidValueException e, HttpServletRequest request){
     	   String error = "Número inválido";
            HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
            StandardError err = new StandardError(Instant.now(),status.value(),e.getMessage(),request.getRequestURI());

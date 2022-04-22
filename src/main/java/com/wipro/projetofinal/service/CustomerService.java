@@ -12,7 +12,7 @@ import com.wipro.projetofinal.entities.SpecialAccount;
 import com.wipro.projetofinal.entities.enums.MovimentDescription;
 import com.wipro.projetofinal.repository.CheckingAccountRepository;
 import com.wipro.projetofinal.repository.SpecialAccountRepository;
-import com.wipro.projetofinal.service.exeption.InvalidMoneyValue;
+import com.wipro.projetofinal.service.exeption.InvalidValueException;
 import com.wipro.projetofinal.service.exeption.ResourceNotFoundExcception;
 
 @Service
@@ -36,10 +36,12 @@ public class CustomerService {
 	}
 
 	public Account deposit(String numberAccount, Double value) throws Exception {
-		Account account = getAccount(numberAccount);
-		
+		Account account = getAccount(numberAccount);	
 		if(value > 0) {
-						
+			
+			// depositando
+			account.deposit(value);
+			
 			// Guardando a movimentação de deposito na conta
 			Moviment moviment = new Moviment(value, MovimentDescription.DEPOSIT);
 			account.addMoviment(moviment);
@@ -49,11 +51,11 @@ public class CustomerService {
 			
 			return account;
 		} 
-			throw new InvalidMoneyValue(value);
+			throw new InvalidValueException(value);
 	}
 
 	// Metodo para Sacar
-	public Account withdraw(String numberAccount, Double value) {
+	public Account withdraw(String numberAccount, Double value) throws Exception {
 		Account account = getAccount(numberAccount);
 		if (value > 0) {
 
@@ -70,7 +72,7 @@ public class CustomerService {
 					
 					return account;
 				} else {
-					throw new InvalidMoneyValue("Saldo Insuficiente!");
+					throw new InvalidValueException("Saldo Insuficiente!");
 				}
 			} else {
 				SpecialAccount specialAccount = (SpecialAccount) account;
@@ -87,17 +89,17 @@ public class CustomerService {
 					
 					return account;
 				} else {
-					throw new InvalidMoneyValue("Saldo Insuficiente para Saque!");
+					throw new InvalidValueException("Saldo Insuficiente para Saque!");
 				}
 			}
 
 		} else {
-			throw new InvalidMoneyValue("Valor " + value + " inválido");
+			throw new InvalidValueException(value);
 		}
 
 	}
 
-	public Account transfer(String originAccount, String destinationAccount, Double value) {
+	public Account transfer(String originAccount, String destinationAccount, Double value) throws Exception {
 
 		Account originAcc = getAccount(originAccount);
 		Account destinationAcc = getAccount(destinationAccount);
@@ -125,11 +127,11 @@ public class CustomerService {
 			
 				return originAcc;
 			} else {
-				throw new InvalidMoneyValue("Saldo Insuficiente para transferencia!");
+				throw new InvalidValueException("Saldo Insuficiente para transferencia!");
 			}
 
 		} else {
-			throw new InvalidMoneyValue("Valor " + value + " inválido");
+			throw new InvalidValueException(value);
 		}
 
 	}

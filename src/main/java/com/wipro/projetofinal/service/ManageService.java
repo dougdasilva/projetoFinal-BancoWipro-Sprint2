@@ -73,7 +73,7 @@ public class ManageService {
 
 	public SpecialAccount saveSpecialAccount(String registration, SpecialAccount account) {
 		Manager manager = managerRepository.findByRegistration(registration);
-		if(managerRepository.existsById(manager.getId()) == true) {
+		if(manager != null) {
 			account.setAccountNumber();
 			account.setCreatedDate(Instant.now());
 			
