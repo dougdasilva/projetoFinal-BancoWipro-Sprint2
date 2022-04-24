@@ -42,9 +42,10 @@ public class Moviment implements Serializable {
 		this.movimentDescription = md;
 	}
 
-	public Moviment(Double value, MovimentDescription md) {
+	public Moviment(Double value, String accountDestination, MovimentDescription md) {
 		this.movimentDate = Instant.now();
 		this.value = value;
+		this.accountDestination = accountDestination;
 		this.movimentDescription = md;
 	}
 

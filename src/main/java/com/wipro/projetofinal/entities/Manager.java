@@ -1,17 +1,20 @@
 package com.wipro.projetofinal.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
-@Table(name= "tb_managers")
+@Table(name = "tb_managers")
 public class Manager extends User {
 
 	private static final long serialVersionUID = 1L;
 
+	@NotBlank(message = "Matrícula é obrigatório!")
+	@Column(nullable = false, unique = true)
 	private String registration;
-	
-	
+
 	public Manager() {
 		// TODO Auto-generated constructor stub
 	}

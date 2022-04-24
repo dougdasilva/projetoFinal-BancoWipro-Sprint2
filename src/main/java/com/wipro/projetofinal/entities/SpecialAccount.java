@@ -1,7 +1,5 @@
 package com.wipro.projetofinal.entities;
 
-import java.time.Instant;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
 

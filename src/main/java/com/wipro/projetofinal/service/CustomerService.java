@@ -1,5 +1,6 @@
 package com.wipro.projetofinal.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,23 +36,28 @@ public class CustomerService {
 		}
 	}
 
+	public List<Moviment> getAllMovimenties(String accountNumber) {
+		Account account = getAccount(accountNumber);
+		return account.getMoviment();
+	}
+
 	public Account deposit(String numberAccount, Double value) throws Exception {
-		Account account = getAccount(numberAccount);	
-		if(value > 0) {
-			
+		Account account = getAccount(numberAccount);
+		if (value > 0) {
+
 			// depositando
 			account.deposit(value);
-			
+
 			// Guardando a movimentação de deposito na conta
-			Moviment moviment = new Moviment(value, MovimentDescription.DEPOSIT);
+			Moviment moviment = new Moviment(value, account.getAccountNumber(), MovimentDescription.DEPOSITO);
 			account.addMoviment(moviment);
-			
+
 			// Mandando o repository salvar
 			account = saveAccount(account);
-			
+
 			return account;
-		} 
-			throw new InvalidValueException(value);
+		}
+		throw new InvalidValueException(value);
 	}
 
 	// Metodo para Sacar
@@ -62,14 +68,14 @@ public class CustomerService {
 			if (account.getClass().getName().equals(CheckingAccount.class.getName())) {
 				if (account.getBalance() >= value) {
 					account.withdraw(value);
-					
+
 					// Guardando a movimentação de conta corrente
-					Moviment moviment = new Moviment(value, MovimentDescription.WITHDRAW);
+					Moviment moviment = new Moviment(value, account.getAccountNumber(), MovimentDescription.SAQUE);
 					account.addMoviment(moviment);
-					
+
 					// Mandando o repository salvar
 					account = saveAccount(account);
-					
+
 					return account;
 				} else {
 					throw new InvalidValueException("Saldo Insuficiente!");
@@ -78,15 +84,14 @@ public class CustomerService {
 				SpecialAccount specialAccount = (SpecialAccount) account;
 				if ((specialAccount.getBalance() + specialAccount.getSpecialLimit()) >= value) {
 					specialAccount.withdraw(value);
-					
-									
+
 					// Guardando a movimentação de conta Especial
-					Moviment moviment = new Moviment(value, MovimentDescription.WITHDRAW);
+					Moviment moviment = new Moviment(value, account.getAccountNumber(), MovimentDescription.SAQUE);
 					account.addMoviment(moviment);
-					
+
 					// Mandando o repository salvar
 					account = saveAccount(account);
-					
+
 					return account;
 				} else {
 					throw new InvalidValueException("Saldo Insuficiente para Saque!");
@@ -109,22 +114,23 @@ public class CustomerService {
 			if (originAcc.getBalance() >= value) {
 				originAcc.withdraw(value);
 				destinationAcc.deposit(value);
-				
-				
+
 				// Guardando a movimentação na conta origem
-				Moviment movimentOrigin = new Moviment(value, originAcc.getAccountNumber(), destinationAccount, MovimentDescription.TRANSFER_SENT);
+				Moviment movimentOrigin = new Moviment(value, originAcc.getAccountNumber(), destinationAccount,
+						MovimentDescription.TRANSFERENCIA_ENVIADA);
 				originAcc.addMoviment(movimentOrigin);
-				
+
 				// Mandando o repository salvar as atualizaçoes da conta origem
 				originAcc = saveAccount(originAcc);
 
-				// Guardando a movimentação  na conta Destino
-				Moviment movimentDestination = new Moviment(value, originAcc.getAccountNumber(), destinationAccount, MovimentDescription.TRANSFER_RECEIVED);
+				// Guardando a movimentação na conta Destino
+				Moviment movimentDestination = new Moviment(value, originAcc.getAccountNumber(), destinationAccount,
+						MovimentDescription.TRANSFERENCIA_RECEBIDA);
 				destinationAcc.addMoviment(movimentDestination);
-				
+
 				// Mandando o repository salvar as atualizaçoes da conta destino
 				destinationAcc = saveAccount(destinationAcc);
-			
+
 				return originAcc;
 			} else {
 				throw new InvalidValueException("Saldo Insuficiente para transferencia!");

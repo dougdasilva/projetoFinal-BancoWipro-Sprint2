@@ -2,9 +2,9 @@ package com.wipro.projetofinal.entities.enums;
 
 public enum CardLevel {
 
-	BRONZE(1),
-	PRATA(2),
-	OURO(3);
+	BRONZE(0),
+	PRATA(1),
+	OURO(2);
 
 	private Integer code;
 
