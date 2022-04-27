@@ -34,8 +34,6 @@ public class CreditCard implements Serializable {
 	private CardLevel cardLevel;
 
 	private Boolean ativo;
-	
-	Random random = new Random();
 
 	public CreditCard() {
 		this.cardNumber = randomNumberCard();
@@ -45,6 +43,7 @@ public class CreditCard implements Serializable {
 		this.expirationDate = Calendar.getInstance();
 		this.expirationDate.add(Calendar.YEAR, 6); // A validade será contada da data atual somado com mais 6 anos
 		this.flag = "MASTERCARD";
+		
 	}
 
 	public CreditCard(CardLevel level) {
@@ -61,7 +60,7 @@ public class CreditCard implements Serializable {
 	
 	public String randomNumberCard() {
 		String numberCard = "5235 ";
-		
+		Random random = new Random();
 		for (int i = 0; i < 3; i++) {
 			numberCard += Integer.toString(random.nextInt(10));
 			for (int j = 0; j < 3; j++) {
@@ -76,6 +75,7 @@ public class CreditCard implements Serializable {
 	
 	public String randomCVV() {
 		String cvv = "";
+		Random random = new Random();
 		for (int i = 0; i < 3; i++) {
 			cvv += Integer.toString(random.nextInt(10));
 		}

@@ -12,7 +12,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -34,10 +33,11 @@ public abstract class Account implements Serializable {
 	protected String accountNumber;
 	protected Double balance;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) // exclui o user relacionado a Account no db.
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) // exclui o user relacionado a Account no db.
 	protected Customer customer;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER) // exclui todas as movimentacoes relacionadas a																// Account no db.
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER) // exclui todas as movimentacoes relacionadas a //
+																	// Account no db.
 	protected List<Moviment> moviment;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone = "GMT-3")
@@ -50,7 +50,6 @@ public abstract class Account implements Serializable {
 	public Account() {
 	}
 
-	
 	public Account(Double balance) {
 		this.balance = balance;
 	}

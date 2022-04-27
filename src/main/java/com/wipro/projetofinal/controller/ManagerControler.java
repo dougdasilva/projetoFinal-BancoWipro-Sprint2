@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wipro.projetofinal.dto.AccountChekingDTO;
@@ -36,11 +37,18 @@ public class ManagerControler {
 
 	@Autowired
 	private ManageService manageService;
+	
 
 	@PostMapping
 	public ResponseEntity<Manager> saveManager(@RequestBody Manager manager)
 			throws Exception, SQLIntegrityConstraintViolationException {
 		return ResponseEntity.status(HttpStatus.CREATED).body(manageService.saveManager(manager));
+	}
+	
+	@GetMapping("/validationPassword")
+	public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password ){
+		String obj = manageService.login(email,password);
+		return ResponseEntity.ok().body(obj);
 	}
 
 	@GetMapping("/checkingAccount/{registration}/{accountNumber}")
@@ -98,7 +106,14 @@ public class ManagerControler {
 	public ResponseEntity<Account> activateCard(@PathVariable String registration, @PathVariable String accountNumber,
 			@RequestBody CreditCard creditCard) {
 		return ResponseEntity.status(HttpStatus.ACCEPTED)
-				.body(manageService.updateCreditCard(registration, accountNumber, creditCard));
+				.body(manageService.createNewCreditCard(registration, accountNumber, creditCard));
+	}
+
+	@PutMapping("/updateCard/{registration}/{accountNumber}")
+	public ResponseEntity<Account> updateCard(@PathVariable String registration, @PathVariable String accountNumber,
+			@RequestBody CreditCard creditCard) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED)
+				.body(manageService.updateCreditCardLimit(registration, accountNumber, creditCard));
 	}
 
 	@DeleteMapping("/checkingAccount/{registration}/{accountNumber}")
