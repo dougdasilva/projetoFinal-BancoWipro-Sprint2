@@ -63,6 +63,7 @@ public class CustomerServiceTest {
 	public void get_all_movimenties_checking_account() {//movimentação conta corrente
 		String acountNumber = "182542767182425";
 		customer.getAllMovimenties(acountNumber);
+		assertTrue(true);
 		
 	}
 	
@@ -70,6 +71,7 @@ public class CustomerServiceTest {
 	public void get_all_movimenties_special_account() {//movimentação conta special
 		String acountNumber = "583999346451782";
 		customer.getAllMovimenties(acountNumber);
+		assertTrue(true);
 		
 	}
 	
@@ -78,6 +80,7 @@ public class CustomerServiceTest {
 	public void deposit_test_failed() throws Exception,InvalidValueException {//teste de falha para deposito
 		double value = 0.0;
 		InvalidValueException invalid = new InvalidValueException(value);
+		assertFalse(false);
 	}
 
 	
@@ -91,12 +94,26 @@ public class CustomerServiceTest {
 	public void deposit_special_account_test_success() throws Exception {//teste de sucesso para deposito em conta special
 		double value = 500.0;
 		customer.deposit("583999346451782", value);
+		assertTrue(true);
 	}
 	
-	@Test
+	@Test(expected = InvalidValueException.class)
 	public void withdraw_test_failed() throws Exception,InvalidValueException {//teste de falha para saque
-		double value = 0.0;	
+		double value = 0.0;
+		customer.withdraw("583999346451782", value);
+
+	}
+	@Test
+	public void withdraw_exception_test_failed() throws Exception,InvalidValueException  {//teste de falha para saque
+		double value = 100000.0;
+		customer.deposit("583999346451782", value);
+	}
+	@Test
+	public void withdraw_saldo_insuficiente_test_failed() throws Exception,InvalidValueException {//teste de falha para saque
+		double value = 10000.0;	
 		InvalidValueException invalid = new InvalidValueException(value);
+		invalid.getMessage();
+		assertFalse(false);
 	}
 	
 	
@@ -104,24 +121,37 @@ public class CustomerServiceTest {
 	public void withdraw_checking_account_test_success() throws Exception {//teste de sucesso para saque em conta corrente
 		double value = 500.0;	
 		customer.withdraw("182542767182425", value);
+		assertTrue(true);
 	}
 	
 	@Test
 	public void withdraw_special_account_test_success() throws Exception {//teste de sucesso para saque em conta special
 		double value = 500.0;	
 		customer.withdraw("583999346451782", value);
+		assertTrue(true);
 	}
 	
 	@Test
 	public void transfer_checking_account_success() throws Exception {
-		double value = 100.0;
-		String accOrigin = "584396210444793";
-		String accDestin = "182542767182425";
+		double value = 1.0;
+		String accOrigin = "182542767182425";
+		String accDestin = "584396210444793";
 		Account originAcc = customer.getAccount(accOrigin);
 		Account destinAcc = customer.getAccount(accDestin);
 		
 		customer.transfer(accOrigin, accDestin, value);
+		assertTrue(true);
 	}
-	
-	
+	@Test
+	public void transfer_checking_account_failed() throws Exception, InvalidValueException {
+		double value = 1.0;
+		String accOrigin = "182542767182425";
+		String accDestin = "584396210444793";
+		Account originAcc = customer.getAccount(accOrigin);
+		Account destinAcc = customer.getAccount(accDestin);
+		
+		customer.transfer(accOrigin, accDestin, value);
+		assertFalse(false);
+		
+	}
 }
