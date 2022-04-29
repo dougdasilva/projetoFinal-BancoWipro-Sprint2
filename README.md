@@ -16,7 +16,6 @@ Esse projeto é o desafio final de programação do bootcamp da Wipro ministrado
 ## Descrição:
 API para web access da aplicação que faz o gerenciamento de conta bancária e que permite as seguintes operações:
 
-
 - Criação de gerente, cliente, conta bancária(corrente ou especial) e cartão de crédito ➕
 - Consulta de todos os dados de gerente e cliente 🔍
 - Remoção das contas báncarias ➖
