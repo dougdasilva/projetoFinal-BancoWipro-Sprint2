@@ -25,6 +25,7 @@ API para web access da aplicação que faz o gerenciamento de conta bancária e 
 - Saques das contas báncarias 💰🔴
 - Transferências entre contas 🔃
 - Atualização do cartão de crédito 💳
+- Histórico de movimentação entre as contas 🏃
 
 ## Gerência do projeto:
 
