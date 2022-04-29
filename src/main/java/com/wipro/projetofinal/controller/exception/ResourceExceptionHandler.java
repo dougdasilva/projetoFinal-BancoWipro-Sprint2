@@ -3,6 +3,7 @@ package com.wipro.projetofinal.controller.exception;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.Instant;
 
+import javax.persistence.NonUniqueResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 
@@ -74,6 +75,12 @@ public class ResourceExceptionHandler {
 	@ExceptionHandler(SQLIntegrityConstraintViolationException.class)
 	public ResponseEntity<StandardError> alreadyExist(SQLIntegrityConstraintViolationException e,
 			HttpServletRequest request) {
+		HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
+		StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+	}
+	@ExceptionHandler(NonUniqueResultException.class)
+	public ResponseEntity<StandardError> existCPF(NonUniqueResultException e, HttpServletRequest request) {
 		HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
 		StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(status).body(err);

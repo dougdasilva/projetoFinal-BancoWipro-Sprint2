@@ -45,6 +45,17 @@ public class CreditCard implements Serializable {
 		this.flag = "MASTERCARD";
 		
 	}
+	public CreditCard(double limit, CardLevel cardLevel) {
+		this.cardNumber = randomNumberCard();
+		this.cvv = randomCVV();
+		this.creditLimit = limit;
+		this.ativo = true;
+		this.expirationDate = Calendar.getInstance();
+		this.expirationDate.add(Calendar.YEAR, 6); // A validade será contada da data atual somado com mais 6 anos
+		this.flag = "MASTERCARD";
+		this.cardLevel = cardLevel;
+		
+	}
 
 	public CreditCard(CardLevel level) {
 		this.ativo = true;

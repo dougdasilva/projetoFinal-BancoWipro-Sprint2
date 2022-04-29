@@ -52,7 +52,7 @@ public class ManageService {
 		this.customerRepository = customerRepository;
 	}
 
-	public Manager saveManager(Manager manager) throws Exception{
+	public Manager saveManager(Manager manager) throws Exception {
 
 		if (manager.getPassword().length() >= 6 && manager.getPassword().length() <= 200) {
 
@@ -111,9 +111,9 @@ public class ManageService {
 
 				Customer customer = customerRepository.findByCpf(customerCpf); // Pego o Customer associado ao cpf acima
 				account.getCustomer().setPassword(enconder.encode(account.getCustomer().getPassword()));
-				if (checkingAccountRepository.findByCustomer(customer) == null) { // Se existir um checkingAccount com
-																					// esse
-																					// Customer ñ é pra deixar salvar
+				CheckingAccount obj = checkingAccountRepository.findByCustomer(customer);
+				if (obj == null) {
+					// Customer ñ é pra deixar salvar
 					if (customerRepository.findByCpf(customerCpf) == null) { // Se já existir um Customer com esse cpf,
 																				// so
 						// salva a Account e descartar o customer
@@ -128,6 +128,11 @@ public class ManageService {
 						return accountDTO;
 					}
 
+				} else if (obj.isStatus() == false) {
+					obj.setStatus(true);
+					CheckingAccount checkingAccount = checkingAccountRepository.save(obj);
+					AccountChekingDTO accountDTO = new AccountChekingDTO(checkingAccount);
+					return accountDTO;
 				} else {
 					throw new AlreadyExistAccountByCpf(customerCpf);
 				}
@@ -151,25 +156,30 @@ public class ManageService {
 				String customerCpf = account.getCustomer().getCpf(); // Pego o cpf do Customer mandado pelo JSON
 				Customer customer = customerRepository.findByCpf(customerCpf); // Pego o Customer associado ao cpf acima
 				account.getCustomer().setPassword(enconder.encode(account.getCustomer().getPassword()));
-				if (specialAccountRepository.findByCustomer(customer) == null) { // Se existir um checkingAccount com
-																					// esse
-																					// Customer ñ é pra deixar salvar
-					if (customerRepository.findByCpf(customerCpf) == null) { // Se já existir um Customer com esse cpf,
-																				// so
-																				// salva a Account e descartar o
-																				// customer
+				SpecialAccount obj = specialAccountRepository.findByCustomer(customer);
+
+				// Se existir um SpecialAccount com esse Customer ñ é pra deixar salvar
+				if (obj == null) {
+
+					if (customerRepository.findByCpf(customerCpf) == null) {
 
 						SpecialAccount specialAccount = specialAccountRepository.save(account);
 						AccountSpecialDTO accountDTO = new AccountSpecialDTO(specialAccount);
 						return accountDTO;
 					} else {
-
+						// Se já existir um Customer com esse cpf, so salva a Account e descartar o
+						// customer
 						account.setCustomer(customer);
 						SpecialAccount specialAccount = specialAccountRepository.save(account);
 						AccountSpecialDTO accountDTO = new AccountSpecialDTO(specialAccount);
 						return accountDTO;
 					}
 
+				} else if (obj.isStatus() == false) {
+					obj.setStatus(true);
+					SpecialAccount specialAccount = specialAccountRepository.save(obj);
+					AccountSpecialDTO accountDTO = new AccountSpecialDTO(specialAccount);
+					return accountDTO;
 				} else {
 					throw new AlreadyExistAccountByCpf(customerCpf);
 				}
@@ -187,6 +197,7 @@ public class ManageService {
 		Manager manager = managerRepository.findByRegistration(registration);
 		List<Account> accounts = new ArrayList<Account>();
 		if (manager != null) {
+
 			accounts.addAll(findAllChecking(registration));
 			accounts.addAll(findAllSpecial(registration));
 			return accounts;
@@ -199,7 +210,7 @@ public class ManageService {
 
 		Manager manager = managerRepository.findByRegistration(registration);
 		if (manager != null) {
-			return checkingAccountRepository.findAll();
+			return checkingAccountRepository.findAllByStatus(true);
 		} else {
 			throw new NullPointerException("Matrícula de Gerente inexistente");
 		}
@@ -209,7 +220,7 @@ public class ManageService {
 	public List<SpecialAccount> findAllSpecial(String registration) {
 		Manager manager = managerRepository.findByRegistration(registration);
 		if (manager != null) {
-			return specialAccountRepository.findAll();
+			return specialAccountRepository.findAllByStatus(true);
 		} else {
 			throw new NullPointerException("Matrícula de Gerente inexistente");
 		}
@@ -220,8 +231,13 @@ public class ManageService {
 		Manager manager = managerRepository.findByRegistration(registration);
 		if (manager != null) {
 			CheckingAccount obj = checkingAccountRepository.findByAccountNumber(number);
-			Optional<CheckingAccount> checking = Optional.ofNullable(obj);
-			return checking.orElseThrow(() -> new ResourceNotFoundExcception(number));
+			if (obj != null && obj.isStatus() == true) {
+				Optional<CheckingAccount> checking = Optional.ofNullable(obj);
+				return checking.orElseThrow(() -> new ResourceNotFoundExcception(number));
+			} else {
+				throw new ResourceNotFoundExcception(number);
+			}
+
 		} else {
 			throw new NullPointerException("Matrícula de Gerente inexistente");
 		}
@@ -232,8 +248,13 @@ public class ManageService {
 		Manager manager = managerRepository.findByRegistration(registration);
 		if (manager != null) {
 			SpecialAccount obj = specialAccountRepository.findByAccountNumber(number);
-			Optional<SpecialAccount> checking = Optional.ofNullable(obj);
-			return checking.orElseThrow(() -> new ResourceNotFoundExcception(number));
+			if (obj != null && obj.isStatus() == true) {
+				Optional<SpecialAccount> checking = Optional.ofNullable(obj);
+				return checking.orElseThrow(() -> new ResourceNotFoundExcception(number));
+			} else {
+				throw new ResourceNotFoundExcception(number);
+			}
+
 		} else {
 			throw new NullPointerException("Matrícula de Gerente inexistente");
 		}
@@ -245,7 +266,8 @@ public class ManageService {
 			Manager manager = managerRepository.findByRegistration(registration);
 			if (manager != null) {
 				CheckingAccount obj = checkingAccountRepository.findByAccountNumber(number);
-				checkingAccountRepository.delete(obj);
+				obj.setStatus(false);
+				checkingAccountRepository.save(obj);
 			} else {
 				throw new NullPointerException("Matrícula de Gerente inexistente");
 			}
@@ -260,7 +282,8 @@ public class ManageService {
 			Manager manager = managerRepository.findByRegistration(registration);
 			if (manager != null) {
 				SpecialAccount obj = specialAccountRepository.findByAccountNumber(number);
-				specialAccountRepository.delete(obj);
+				obj.setStatus(false);
+				specialAccountRepository.save(obj);
 			} else {
 				throw new NullPointerException("Matrícula de Gerente inexistente");
 			}

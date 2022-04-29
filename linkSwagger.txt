@@ -1,0 +1,6 @@
+
+Link do swagger
+
+// só trocar a porta que vc usa
+
+http://localhost:8083/swagger-ui.html

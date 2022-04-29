@@ -32,7 +32,8 @@ public abstract class Account implements Serializable {
 
 	protected String accountNumber;
 	protected Double balance;
-
+	protected boolean status;
+	
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) // exclui o user relacionado a Account no db.
 	protected Customer customer;
 
@@ -46,6 +47,17 @@ public abstract class Account implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) // exclui o cartão relacionado a Account no db.
 	@JoinColumn(name = "credit_id")
 	protected CreditCard creditCard;
+
+	
+
+	
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
 
 	public Account() {
 	}

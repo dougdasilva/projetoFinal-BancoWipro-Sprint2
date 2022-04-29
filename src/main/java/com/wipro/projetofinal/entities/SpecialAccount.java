@@ -12,10 +12,12 @@ public class SpecialAccount extends Account {
 	private Double specialLimit;
 
 	public SpecialAccount() {
+		super.status = true;
 	}
 
 	public SpecialAccount(Double balance,Double specialLimit) {
 		super(balance);
+		super.status = true;
 		this.specialLimit = specialLimit;
 	}
 

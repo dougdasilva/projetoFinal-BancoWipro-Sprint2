@@ -38,7 +38,7 @@ public class ManagerControler {
 	@Autowired
 	private ManageService manageService;
 	
-
+//	@Api()
 	@PostMapping
 	public ResponseEntity<Manager> saveManager(@RequestBody Manager manager)
 			throws Exception, SQLIntegrityConstraintViolationException {
